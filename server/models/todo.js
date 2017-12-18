@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 
 var Todo = mongoose.model('Todo',{
     text: {
+        // Validators.
         type: String,
         required: true,
         trim: true,
@@ -17,4 +18,10 @@ var Todo = mongoose.model('Todo',{
     }
 });
 
-module.exports = {Todo};
+
+// function for testing the object destructuring.
+function test(){
+    console.log('Test');
+}
+
+module.exports = {Todo,test};

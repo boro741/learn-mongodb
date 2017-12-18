@@ -1,6 +1,6 @@
 // My guess for using var for mongoose is 
 // I'm assigning it the Promise.
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
