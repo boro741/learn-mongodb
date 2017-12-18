@@ -4,10 +4,19 @@ const request = require('supertest');
 const {app} = require('./../server');
 const {User} = require('./../models/user');
 
+
+const users = [
+    {email: 'boro@gmail.com'},
+    {email: 'narzary@gmail.com'}
+];
+
 // used before each test case.
 beforeEach( function(done){
     // Remove all the users from database.
     User.remove({})
+        .then( function(){
+            return User.insertMany(users);
+        })
         .then( function(){
             done();
         });
@@ -33,7 +42,7 @@ describe('POST /user', function(){
                     return done(err);
                 }
 
-                User.find().then( function(users){
+                User.find({email}).then( function(users){
                     expect(users.length).toBe(1);
                     expect(users[0].email).toBe(email);
                     done();
@@ -54,7 +63,7 @@ describe('POST /user', function(){
                 }
 
                 User.find().then( function(users){
-                    expect(users.length).toBe(0);
+                    expect(users.length).toBe(2);
                     done();
                 }).catch( function(e){
                     return done(e);
@@ -63,13 +72,21 @@ describe('POST /user', function(){
     });
 });
 
-describe('GET /user', function(){
-    it('Should return user', function(done){
-        request(app)
-            .get('/user')
-            .expect(200)
-            .end( function(res){
-                expect(res.body.email).toBe(email);
-            });
+
+
+// Here I'm deleting all the db and 
+// then adding the dummy data
+// and test the my dummy data length returned
+// to be true.
+describe('GET /user', () => {
+    it('should get all users', (done) => {
+      request(app)
+        .get('/user')
+        .expect(200)
+        .expect((res) => {
+            // connected to app.get('/user') in server.js
+          expect(res.body.user.length).toBe(2);
+        })
+        .end(done);
     });
-});
+  });

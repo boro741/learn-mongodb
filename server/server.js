@@ -18,16 +18,6 @@ app.use(bodyParser.json()); // Takes the JSON and returns function.
 
 //test();
 
-app.get('/user', (req,res) => {
-    
-    User.find().then( (result)=>{
-        res.send({result});
-    }, (err)=>{
-        res.status(400).send(err);
-    });
-
-});
-
 app.post('/user', (req,res) => {
 
     // req.body is the body attached by bodyParser.
@@ -45,6 +35,16 @@ app.post('/user', (req,res) => {
     }, (e) => {
         res.status(400).send(e);
     });
+});
+
+app.get('/user', (req,res) => {
+    
+    User.find().then( (user)=>{
+        res.send({user});
+    }, (err)=>{
+        res.status(400).send(err);
+    });
+
 });
 
 app.listen(3000, () => {
