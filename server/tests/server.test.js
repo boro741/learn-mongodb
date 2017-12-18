@@ -62,3 +62,14 @@ describe('POST /user', function(){
             });
     });
 });
+
+describe('GET /user', function(){
+    it('Should return user', function(done){
+        request(app)
+            .get('/user')
+            .expect(200)
+            .end( function(res){
+                expect(res.body.email).toBe(email);
+            });
+    });
+});

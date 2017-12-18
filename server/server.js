@@ -18,6 +18,16 @@ app.use(bodyParser.json()); // Takes the JSON and returns function.
 
 //test();
 
+app.get('/user', (req,res) => {
+    
+    User.find().then( (result)=>{
+        res.send({result});
+    }, (err)=>{
+        res.status(400).send(err);
+    });
+
+});
+
 app.post('/user', (req,res) => {
 
     // req.body is the body attached by bodyParser.
