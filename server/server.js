@@ -56,12 +56,10 @@ app.get('/user/:id', (req,res)=>{
         return res.status(404).send();
     }
 
-    User.findById({
-        _id: id
-    }).then( (user)=> {
+    User.findById(id).then( (user)=> {
 
         if(!user){
-           return res.status(404).send({});
+           return res.status(404).send();
         }
 
         // I'm using ES6 syntax - {user}
@@ -69,7 +67,7 @@ app.get('/user/:id', (req,res)=>{
         // So I'm sending a object with user property.
         res.send({user});
     }).catch((err)=>{
-        res.status(400).send(); // Remove .send(err) caz it can contain some private info.
+        return res.status(400).send(); // Remove .send(err) caz it can contain some private info.
     });
 
 });

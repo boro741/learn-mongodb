@@ -1,14 +1,18 @@
 const expect = require('expect');
 const request = require('supertest');
+const {ObjectID} = require('mongodb');
 
 const {app} = require('./../server');
 const {User} = require('./../models/user');
 
 
-const users = [
-    {email: 'boro@gmail.com'},
-    {email: 'narzary@gmail.com'}
-];
+const users = [{
+    _id: new ObjectID(),
+    email: 'boro@gmail.com'
+},{
+    _id: new ObjectID(),
+    email: 'narzary@gmail.com'
+}];
 
 // used before each test case.
 beforeEach( function(done){
@@ -21,6 +25,9 @@ beforeEach( function(done){
             done();
         });
 });
+
+
+
 
 describe('POST /user', function(){
     it('Should create a new user ', function(done){
@@ -87,6 +94,36 @@ describe('GET /user', () => {
             // connected to app.get('/user') in server.js
           expect(res.body.user.length).toBe(2);
         })
+        .end(done);
+    });
+});
+
+
+// toHexString() - return the ObjectID id as a 24 byte hex string representation
+describe('GET /todos/:id', () => {
+    it('should return user doc', (done) => {
+      request(app)
+        .get(`/user/${users[0]._id.toHexString()}`)
+        .expect(200)
+        .expect((res) => {
+          expect(res.body.user.email).toBe(users[0].email);
+        })
+        .end(done);
+    });
+  
+    it('should return 404 if todo not found', (done) => {
+      var hexId = new ObjectID().toHexString();
+  
+      request(app)
+        .get(`/user/${hexId}`)
+        .expect(404)
+        .end(done);
+    });
+  
+    it('should return 404 for non-object ids', (done) => {
+      request(app)
+        .get('/user/123abc')
+        .expect(404)
         .end(done);
     });
   });
