@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const {ObjectID} = require('mongodb');
 
 // Connecting to Mongoose DB.
 // As I'm importing the same mongoose variable 
@@ -7,6 +8,7 @@ const bodyParser = require('body-parser');
 var {mongoose} = require('./db/mongoose');
 var {Todo,test} = require('./models/todo');
 var {User} = require('./models/user');
+
 
 var app = express();
 
@@ -46,6 +48,32 @@ app.get('/user', (req,res) => {
     });
 
 });
+
+app.get('/user/:id', (req,res)=>{
+    var id = req.params.id;
+
+    if( !ObjectID.isValid(id)){
+        return res.status(404).send();
+    }
+
+    User.findById({
+        _id: id
+    }).then( (user)=> {
+
+        if(!user){
+           return res.status(404).send({});
+        }
+
+        // I'm using ES6 syntax - {user}
+        // As {user: user} same.
+        // So I'm sending a object with user property.
+        res.send({user});
+    }).catch((err)=>{
+        res.status(400).send(); // Remove .send(err) caz it can contain some private info.
+    });
+
+});
+
 
 app.listen(3000, () => {
     console.log('Started on port 3000');
