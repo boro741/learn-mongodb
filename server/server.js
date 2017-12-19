@@ -12,6 +12,8 @@ var {User} = require('./models/user');
 
 var app = express();
 
+var port = process.env.PORT || 3000; 
+
 // Giving the body json to the express
 // i.e it converts the json into object and 
 // attach it to the req .
@@ -73,8 +75,8 @@ app.get('/user/:id', (req,res)=>{
 });
 
 
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 });
 
 module.exports = {
