@@ -2,7 +2,7 @@
   "name": "to-do-api",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     
     "start": "node server/server.js",
@@ -10,7 +10,6 @@
     "test-watch": "nodemon --exec 'npm test'"
   },
   "engines": {
-    // tell the heroku the version I want to use.
     "node": "8.9.1"    
   },
   "author": "",
