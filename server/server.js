@@ -81,13 +81,14 @@ app.delete('/user/:id', (req,res) => {
        return res.status(404).send();
    }
 
+
    User.findByIdAndRemove(id).then( (user) => {
         if( !user ){
             return res.status(404).send();
         }
 
-        res.send(user);
         console.log('Deleted:',user);
+        res.send(user);
    }).catch( (e) => {
        res.status(400).send();
    });

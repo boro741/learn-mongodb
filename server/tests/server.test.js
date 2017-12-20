@@ -29,6 +29,7 @@ beforeEach( function(done){
 
 
 
+
 describe('POST /user', function(){
     it('Should create a new user ', function(done){
         var email = 'pavanboro14@gmail.com';
@@ -99,6 +100,8 @@ describe('GET /user', () => {
 });
 
 
+
+
 // toHexString() - return the ObjectID id as a 24 byte hex string representation
 describe('GET /todos/:id', () => {
     it('should return user doc', (done) => {
@@ -127,3 +130,46 @@ describe('GET /todos/:id', () => {
         .end(done);
     });
   });
+
+
+  describe('DELETE /user/:id', function(){
+    it('should remove a user', function(done){
+        var hexId = users[0]._id.toHexString();
+
+        request(app)
+            .delete(`/user/${hexId}`)
+            .expect(200)
+            .expect( (res) => {
+                expect(res.body._id).toBe(hexId);
+                
+            })
+            .end( (err,res) => {
+                if(err){
+                    return done(err);
+                }
+
+                User.findById(hexId).then( (user) => {
+                    
+                    expect(user).toNotExist();
+                    done();
+                })
+                .catch( (e) => {
+                    return done(e);
+                });
+            });
+    });
+
+    it('should return 404 if user not found', function(done){
+        request(app)
+            .delete('/user/5a39edb1fd599614005ea0ac')
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return 404 if object id is not valid', function(done){
+        request(app)
+            .delete('/user/1234')
+            .expect(404)
+            .end(done);
+    })
+});
