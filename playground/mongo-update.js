@@ -19,6 +19,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err,db)=>{
             age: 1
         }
     },{
+        // It means we get new object back or returned.
         returnOriginal: false
     }).then((result) => {
         console.log(result);
