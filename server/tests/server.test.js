@@ -26,7 +26,25 @@ beforeEach( function(done){
         });
 });
 
+describe('PATCH /user/:id', function(){
+    it('Should update a user', function(done){
+        var hexId = users[0]._id.toHexString();
+        var email = 'test@gmail.com';
 
+
+
+        request(app)
+            .patch(`/user/${hexId}`)
+            .send({
+                email
+            })
+            .expect(200)
+            .expect( function(res){
+                expect(res.body.user.email).toBe(email)
+            })
+            .end(done);
+    })
+});
 
 
 
@@ -56,8 +74,8 @@ describe('POST /user', function(){
                     done();
                 }).catch( function(e){
                     done(e);
-                })
-            })
+                });
+            });
     });
 
     it('Should not create user with invalid body data', function(done){
