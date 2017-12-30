@@ -11,7 +11,7 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo,test} = require('./models/todo');
 var {User} = require('./models/user');
-
+var {authenticate} = require('./middleware/authenticate');
 
 var app = express();
 
@@ -66,6 +66,12 @@ app.post('/user', (req, res) => {
     });
 }); */
 
+
+
+app.get('/user/me',authenticate, (req,res) => {
+    res.send(req.user);
+});
+
 app.get('/user', (req,res) => {
     
     User.find().then( (user)=>{
@@ -74,7 +80,7 @@ app.get('/user', (req,res) => {
         res.status(400).send(err);
     });
 
-});
+}); 
 
 app.get('/user/:id', (req,res)=>{
     var id = req.params.id;
@@ -98,6 +104,8 @@ app.get('/user/:id', (req,res)=>{
     });
 
 });
+
+
 
 app.delete('/user/:id', (req,res) => {
     var id = req.params.id;
