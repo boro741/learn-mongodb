@@ -25,24 +25,46 @@ app.use(bodyParser.json()); // Takes the JSON and returns function.
 
 //test();
 
-app.post('/user', (req,res) => {
+app.post('/user', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+    var user = new User(body);
+  
+    user.save().then(() => {
+      return user.generateAuthToken();
+    }).then((token) => {
+      res.header('x-auth', token).send(user);
+    }).catch((e) => {
+      res.status(400).send(e);
+    })
+  });
+
+/* app.post('/user', (req,res) => {
 
     // req.body is the body attached by bodyParser.
     console.log(req.body);
 
-    var user = new User({
-        email: req.body.email
+    var body = _.pick(req.body, ['email','password']);
+
+    var user = new User(body);
+
+
+    user.save().then( () => {
+        return user.generateAuthToken();
+    }).then( (token) => {
+        // Custom header.
+        res.header('x-auth',token).send(user);
+    }, (e) => {
+        res.status(400).send(e);
     });
 
-
-    user.save().then( (doc) => {
+   /*  user.save().then( (doc) => {
         // After saving then sending 
         // back the response to the client.
         res.send(doc);
     }, (e) => {
         res.status(400).send(e);
     });
-});
+}); */
 
 app.get('/user', (req,res) => {
     
